@@ -1,0 +1,37 @@
+STACK RUSH NEON — GOOGLE PLAY DATA SAFETY NOTES
+
+Based on the current planned app implementation:
+
+Does the app collect or share user data?
+No.
+
+Is all user data encrypted in transit?
+Not applicable because the app does not transmit user data.
+
+Can users request deletion?
+The app does not maintain server-side user accounts or user data.
+Users can remove local preferences and scores by clearing app data or uninstalling the app.
+
+Data types collected:
+None.
+
+Data shared:
+None.
+
+Advertising:
+No ads.
+
+Analytics:
+No analytics.
+
+Account creation:
+No account.
+
+Internet requirement:
+No internet connection required.
+
+Local storage:
+The app stores best score and preferences locally using SharedPreferences.
+
+Important:
+Review these answers again before publishing if any SDK, advertising, analytics, cloud service, crash-reporting service, online leaderboard, or login feature is added.

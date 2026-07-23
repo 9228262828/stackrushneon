@@ -1,0 +1,40 @@
+STACK RUSH NEON — GOOGLE PLAY LISTING
+
+App Name:
+Stack Rush Neon
+
+Package Name:
+com.stackrushneon.arcade
+
+Category:
+Game / Arcade
+
+Short Description:
+Tap, stack neon blocks, build combos, and chase your highest score offline.
+
+Long Description:
+Enter the neon rush and test your timing in Stack Rush Neon, a fast offline arcade stacking game.
+
+Tap at the perfect moment to place each moving block on the tower. Accurate drops keep your tower wide, while imperfect drops cut away the overhanging section and make every next move more challenging.
+
+Build combos with perfect hits, increase your score, and try to beat your personal best.
+
+FEATURES
+
+• Simple one-tap gameplay
+• Smooth neon visual style
+• Perfect-hit combo system
+• Progressive difficulty
+• Local best-score tracking
+• Particle effects and camera shake
+• Sound and haptic settings
+• Pause and restart options
+• Fully offline gameplay
+• No login or account required
+• No advertisements
+• No internet connection required
+
+Stack higher, stay focused, and keep the neon rush alive.
+
+Suggested tags:
+arcade, stack, neon, offline game, casual game, timing game, high score
