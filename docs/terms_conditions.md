@@ -1,6 +1,6 @@
 # Terms and Conditions — Stack Rush Neon
 
-**Last updated: July 24, 2026**
+**Last updated: JYLY, 2026**
 
 These Terms and Conditions govern your use of Stack Rush Neon.
 

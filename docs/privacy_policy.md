@@ -1,6 +1,6 @@
 # Privacy Policy — Stack Rush Neon
 
-**Last updated: July 24, 2026**
+**Last updated: JYLY, 2026**
 
 Stack Rush Neon is an offline arcade game developed to provide a simple and entertaining stacking experience.
 

@@ -1,7 +1,7 @@
 abstract final class AppConstants {
   static const appName = 'Stack Rush Neon';
-  static const privacyUpdated = 'July 24, 2026';
-  static const termsUpdated = 'July 24, 2026';
+  static const privacyUpdated = 'JYLY, 2026';
+  static const termsUpdated = 'JYLY, 2026';
 
   static const initialBlockWidth = 220.0;
   static const blockHeight = 26.0;
