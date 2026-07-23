@@ -3,10 +3,7 @@ import 'package:flutter/material.dart';
 import '../core/app_colors.dart';
 
 class NeonLogo extends StatelessWidget {
-  const NeonLogo({
-    this.size = 140,
-    super.key,
-  });
+  const NeonLogo({this.size = 140, super.key});
 
   final double size;
 
@@ -23,9 +20,7 @@ class NeonLogo extends StatelessWidget {
             height: size * .88,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(size * .24),
-              border: Border.all(
-                color: AppColors.cyan.withValues(alpha: .65),
-              ),
+              border: Border.all(color: AppColors.cyan.withValues(alpha: .65)),
               gradient: LinearGradient(
                 colors: [
                   AppColors.cyan.withValues(alpha: .16),
@@ -41,21 +36,9 @@ class NeonLogo extends StatelessWidget {
               ],
             ),
           ),
-          _Bar(
-            width: size * .58,
-            y: size * .19,
-            color: AppColors.pink,
-          ),
-          _Bar(
-            width: size * .45,
-            y: 0,
-            color: AppColors.cyan,
-          ),
-          _Bar(
-            width: size * .31,
-            y: -size * .19,
-            color: AppColors.pink,
-          ),
+          _Bar(width: size * .58, y: size * .19, color: AppColors.pink),
+          _Bar(width: size * .45, y: 0, color: AppColors.cyan),
+          _Bar(width: size * .31, y: -size * .19, color: AppColors.pink),
         ],
       ),
     );
@@ -63,11 +46,7 @@ class NeonLogo extends StatelessWidget {
 }
 
 class _Bar extends StatelessWidget {
-  const _Bar({
-    required this.width,
-    required this.y,
-    required this.color,
-  });
+  const _Bar({required this.width, required this.y, required this.color});
 
   final double width;
   final double y;
@@ -84,10 +63,7 @@ class _Bar extends StatelessWidget {
           color: color,
           borderRadius: BorderRadius.circular(6),
           boxShadow: [
-            BoxShadow(
-              color: color.withValues(alpha: .7),
-              blurRadius: 16,
-            ),
+            BoxShadow(color: color.withValues(alpha: .7), blurRadius: 16),
           ],
         ),
       ),

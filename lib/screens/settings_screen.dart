@@ -1,7 +1,11 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 import '../controllers/settings_controller.dart';
 import '../core/app_colors.dart';
+import '../services/haptic_service.dart';
+import '../services/sound_service.dart';
 import '../widgets/neon_background.dart';
 
 class SettingsScreen extends StatefulWidget {
@@ -24,6 +28,26 @@ class _SettingsScreenState extends State<SettingsScreen> {
     if (mounted) setState(() {});
   }
 
+  Future<void> _buttonFeedback() async {
+    await HapticService.instance.selectionClick();
+    await SoundService.instance.playButton();
+  }
+
+  Future<void> _setSound(bool value) async {
+    await _buttonFeedback();
+    await _controller.setSound(value);
+  }
+
+  Future<void> _setMusic(bool value) async {
+    await _buttonFeedback();
+    await _controller.setMusic(value);
+  }
+
+  Future<void> _setHaptics(bool value) async {
+    await _buttonFeedback();
+    await _controller.setHaptics(value);
+  }
+
   @override
   void dispose() {
     _controller
@@ -41,11 +65,17 @@ class _SettingsScreenState extends State<SettingsScreen> {
           content: const Text('This cannot be undone.'),
           actions: [
             TextButton(
-              onPressed: () => Navigator.of(context).pop(false),
+              onPressed: () {
+                unawaited(_buttonFeedback());
+                Navigator.of(context).pop(false);
+              },
               child: const Text('CANCEL'),
             ),
             FilledButton(
-              onPressed: () => Navigator.of(context).pop(true),
+              onPressed: () {
+                unawaited(_buttonFeedback());
+                Navigator.of(context).pop(true);
+              },
               child: const Text('RESET'),
             ),
           ],
@@ -57,9 +87,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
     await _controller.resetBestScore();
 
     if (!mounted) return;
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Best score reset')),
-    );
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(const SnackBar(content: Text('Best score reset')));
   }
 
   @override
@@ -77,25 +107,28 @@ class _SettingsScreenState extends State<SettingsScreen> {
               title: 'Sound effects',
               subtitle: 'Hits, perfect drops and game over',
               value: settings.soundEnabled,
-              onChanged: _controller.setSound,
+              onChanged: (value) => unawaited(_setSound(value)),
             ),
             _SettingsTile(
               icon: Icons.music_note_rounded,
               title: 'Music',
-              subtitle: 'Prepared for future background tracks',
+              subtitle: 'Background music while playing',
               value: settings.musicEnabled,
-              onChanged: _controller.setMusic,
+              onChanged: (value) => unawaited(_setMusic(value)),
             ),
             _SettingsTile(
               icon: Icons.vibration_rounded,
               title: 'Haptics',
               subtitle: 'Vibration feedback while stacking',
               value: settings.hapticsEnabled,
-              onChanged: _controller.setHaptics,
+              onChanged: (value) => unawaited(_setHaptics(value)),
             ),
             const SizedBox(height: 18),
             OutlinedButton.icon(
-              onPressed: _resetBestScore,
+              onPressed: () {
+                unawaited(_buttonFeedback());
+                unawaited(_resetBestScore());
+              },
               icon: const Icon(Icons.restart_alt_rounded),
               label: const Text('RESET BEST SCORE'),
               style: OutlinedButton.styleFrom(
@@ -136,10 +169,7 @@ class _SettingsTile extends StatelessWidget {
         value: value,
         onChanged: onChanged,
         secondary: Icon(icon, color: AppColors.cyan),
-        title: Text(
-          title,
-          style: const TextStyle(fontWeight: FontWeight.w800),
-        ),
+        title: Text(title, style: const TextStyle(fontWeight: FontWeight.w800)),
         subtitle: Text(subtitle),
       ),
     );

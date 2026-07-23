@@ -83,10 +83,7 @@ class _LegalPage extends StatelessWidget {
 }
 
 class _LegalSection {
-  const _LegalSection({
-    required this.heading,
-    required this.body,
-  });
+  const _LegalSection({required this.heading, required this.body});
 
   final String heading;
   final String body;

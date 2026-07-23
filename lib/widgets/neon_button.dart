@@ -1,4 +1,9 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+
+import '../services/haptic_service.dart';
+import '../services/sound_service.dart';
 
 class NeonButton extends StatelessWidget {
   const NeonButton({
@@ -16,22 +21,24 @@ class NeonButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final effectiveOnPressed = onPressed == null
+        ? null
+        : () {
+            unawaited(HapticService.instance.selectionClick());
+            unawaited(SoundService.instance.playButton());
+            onPressed!();
+          };
+
     final button = icon == null
-        ? FilledButton(
-            onPressed: onPressed,
-            child: Text(label),
-          )
+        ? FilledButton(onPressed: effectiveOnPressed, child: Text(label))
         : FilledButton.icon(
-            onPressed: onPressed,
+            onPressed: effectiveOnPressed,
             icon: Icon(icon),
             label: Text(label),
           );
 
     if (!compact) return button;
 
-    return SizedBox(
-      height: 52,
-      child: button,
-    );
+    return SizedBox(height: 52, child: button);
   }
 }

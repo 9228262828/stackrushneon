@@ -1,6 +1,10 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 import '../core/app_colors.dart';
+import '../services/haptic_service.dart';
+import '../services/sound_service.dart';
 
 class ScoreHud extends StatelessWidget {
   const ScoreHud({
@@ -23,7 +27,11 @@ class ScoreHud extends StatelessWidget {
         _HudItem(label: 'COMBO', value: 'x$combo'),
         const Spacer(),
         IconButton(
-          onPressed: onPause,
+          onPressed: () {
+            unawaited(HapticService.instance.selectionClick());
+            unawaited(SoundService.instance.playButton());
+            onPause();
+          },
           icon: const Icon(Icons.pause_rounded),
         ),
       ],
@@ -32,10 +40,7 @@ class ScoreHud extends StatelessWidget {
 }
 
 class _HudItem extends StatelessWidget {
-  const _HudItem({
-    required this.label,
-    required this.value,
-  });
+  const _HudItem({required this.label, required this.value});
 
   final String label;
   final String value;
@@ -47,9 +52,7 @@ class _HudItem extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.black.withValues(alpha: .22),
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(
-          color: AppColors.cyan.withValues(alpha: .2),
-        ),
+        border: Border.all(color: AppColors.cyan.withValues(alpha: .2)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

@@ -29,15 +29,9 @@ class _SplashScreenState extends State<SplashScreen>
       duration: const Duration(milliseconds: 1100),
     );
 
-    _scale = CurvedAnimation(
-      parent: _controller,
-      curve: Curves.easeOutBack,
-    );
+    _scale = CurvedAnimation(parent: _controller, curve: Curves.easeOutBack);
 
-    _fade = CurvedAnimation(
-      parent: _controller,
-      curve: Curves.easeOut,
-    );
+    _fade = CurvedAnimation(parent: _controller, curve: Curves.easeOut);
 
     _controller.forward();
 
@@ -77,21 +71,21 @@ class _SplashScreenState extends State<SplashScreen>
                   Text(
                     'STACK RUSH',
                     style: Theme.of(context).textTheme.headlineLarge?.copyWith(
-                          letterSpacing: 4,
-                          shadows: [
-                            Shadow(
-                              color: AppColors.cyan.withValues(alpha: .8),
-                              blurRadius: 18,
-                            ),
-                          ],
+                      letterSpacing: 4,
+                      shadows: [
+                        Shadow(
+                          color: AppColors.cyan.withValues(alpha: .8),
+                          blurRadius: 18,
                         ),
+                      ],
+                    ),
                   ),
                   Text(
                     'NEON',
                     style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                          color: AppColors.pink,
-                          letterSpacing: 10,
-                        ),
+                      color: AppColors.pink,
+                      letterSpacing: 10,
+                    ),
                   ),
                   const SizedBox(height: 14),
                   const Text(

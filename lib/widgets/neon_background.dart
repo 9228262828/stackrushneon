@@ -3,10 +3,7 @@ import 'package:flutter/material.dart';
 import '../core/app_colors.dart';
 
 class NeonBackground extends StatelessWidget {
-  const NeonBackground({
-    required this.child,
-    super.key,
-  });
+  const NeonBackground({required this.child, super.key});
 
   final Widget child;
 
@@ -20,10 +17,7 @@ class NeonBackground extends StatelessWidget {
               gradient: RadialGradient(
                 center: Alignment(0, -.4),
                 radius: 1.2,
-                colors: [
-                  Color(0xFF171744),
-                  AppColors.background,
-                ],
+                colors: [Color(0xFF171744), AppColors.background],
               ),
             ),
           ),
@@ -51,10 +45,7 @@ class NeonBackground extends StatelessWidget {
 }
 
 class _GlowOrb extends StatelessWidget {
-  const _GlowOrb({
-    required this.size,
-    required this.color,
-  });
+  const _GlowOrb({required this.size, required this.color});
 
   final double size;
   final Color color;
@@ -67,9 +58,7 @@ class _GlowOrb extends StatelessWidget {
         height: size,
         decoration: BoxDecoration(
           shape: BoxShape.circle,
-          gradient: RadialGradient(
-            colors: [color, Colors.transparent],
-          ),
+          gradient: RadialGradient(colors: [color, Colors.transparent]),
         ),
       ),
     );

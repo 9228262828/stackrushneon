@@ -49,10 +49,7 @@ class GamePainter extends CustomPainter {
       ..shader = const RadialGradient(
         center: Alignment(0, -.45),
         radius: 1.2,
-        colors: [
-          Color(0xFF171744),
-          AppColors.background,
-        ],
+        colors: [Color(0xFF171744), AppColors.background],
       ).createShader(Offset.zero & size);
     canvas.drawRect(Offset.zero & size, bg);
 
@@ -70,10 +67,7 @@ class GamePainter extends CustomPainter {
   }
 
   void _paintBlock(Canvas canvas, StackBlock block) {
-    final rect = RRect.fromRectAndRadius(
-      block.rect,
-      const Radius.circular(7),
-    );
+    final rect = RRect.fromRectAndRadius(block.rect, const Radius.circular(7));
 
     final glow = Paint()
       ..color = block.color.withValues(alpha: .35)

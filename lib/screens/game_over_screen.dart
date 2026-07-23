@@ -1,6 +1,10 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 import '../core/app_colors.dart';
+import '../services/haptic_service.dart';
+import '../services/sound_service.dart';
 import '../widgets/neon_background.dart';
 import '../widgets/neon_button.dart';
 import 'game_screen.dart';
@@ -16,6 +20,11 @@ class GameOverScreen extends StatelessWidget {
   final int score;
   final int bestScore;
 
+  void _buttonFeedback() {
+    unawaited(HapticService.instance.selectionClick());
+    unawaited(SoundService.instance.playButton());
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,11 +35,7 @@ class GameOverScreen extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Icon(
-                  Icons.bolt_rounded,
-                  size: 76,
-                  color: AppColors.pink,
-                ),
+                const Icon(Icons.bolt_rounded, size: 76, color: AppColors.pink),
                 const SizedBox(height: 18),
                 Text(
                   'GAME OVER',
@@ -71,6 +76,7 @@ class GameOverScreen extends StatelessWidget {
                 const SizedBox(height: 12),
                 TextButton.icon(
                   onPressed: () {
+                    _buttonFeedback();
                     Navigator.of(context).pushAndRemoveUntil(
                       MaterialPageRoute<void>(
                         builder: (_) => const HomeScreen(),

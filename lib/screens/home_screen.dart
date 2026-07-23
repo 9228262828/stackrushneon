@@ -1,6 +1,10 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 import '../core/app_colors.dart';
+import '../services/haptic_service.dart';
+import '../services/sound_service.dart';
 import '../services/storage_service.dart';
 import '../widgets/neon_background.dart';
 import '../widgets/neon_button.dart';
@@ -20,10 +24,15 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   int get bestScore => StorageService.instance.bestScore;
 
+  void _buttonFeedback() {
+    unawaited(HapticService.instance.selectionClick());
+    unawaited(SoundService.instance.playButton());
+  }
+
   Future<void> _open(Widget screen) async {
-    await Navigator.of(context).push(
-      MaterialPageRoute<void>(builder: (_) => screen),
-    );
+    await Navigator.of(
+      context,
+    ).push(MaterialPageRoute<void>(builder: (_) => screen));
     if (mounted) setState(() {});
   }
 
@@ -41,9 +50,9 @@ class _HomeScreenState extends State<HomeScreen> {
                 const SizedBox(height: 24),
                 Text(
                   'STACK RUSH',
-                  style: Theme.of(context).textTheme.headlineLarge?.copyWith(
-                        letterSpacing: 3.5,
-                      ),
+                  style: Theme.of(
+                    context,
+                  ).textTheme.headlineLarge?.copyWith(letterSpacing: 3.5),
                 ),
                 const Text(
                   'NEON',
@@ -90,11 +99,14 @@ class _HomeScreenState extends State<HomeScreen> {
                 NeonButton(
                   label: 'PLAY',
                   icon: Icons.play_arrow_rounded,
-                  onPressed: () => _open(const GameScreen()),
+                  onPressed: () => unawaited(_open(const GameScreen())),
                 ),
                 const SizedBox(height: 14),
                 OutlinedButton.icon(
-                  onPressed: () => _open(const SettingsScreen()),
+                  onPressed: () {
+                    _buttonFeedback();
+                    unawaited(_open(const SettingsScreen()));
+                  },
                   icon: const Icon(Icons.tune_rounded),
                   label: const Text('SETTINGS'),
                   style: OutlinedButton.styleFrom(
@@ -110,11 +122,17 @@ class _HomeScreenState extends State<HomeScreen> {
                   spacing: 8,
                   children: [
                     TextButton(
-                      onPressed: () => _open(const PrivacyScreen()),
+                      onPressed: () {
+                        _buttonFeedback();
+                        unawaited(_open(const PrivacyScreen()));
+                      },
                       child: const Text('Privacy'),
                     ),
                     TextButton(
-                      onPressed: () => _open(const TermsScreen()),
+                      onPressed: () {
+                        _buttonFeedback();
+                        unawaited(_open(const TermsScreen()));
+                      },
                       child: const Text('Terms'),
                     ),
                   ],

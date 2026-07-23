@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
@@ -19,9 +20,9 @@ class GameController extends ChangeNotifier {
     StorageService? storage,
     HapticService? haptics,
     SoundService? sound,
-  })  : _storage = storage ?? StorageService.instance,
-        _haptics = haptics ?? const HapticService(),
-        _sound = sound ?? const SoundService();
+  }) : _storage = storage ?? StorageService.instance,
+       _haptics = haptics ?? HapticService.instance,
+       _sound = sound ?? SoundService.instance;
 
   final AppSettings settings;
   final StorageService _storage;
@@ -40,6 +41,7 @@ class GameController extends ChangeNotifier {
   double direction = 1;
   double cameraShake = 0;
   bool lastWasPerfect = false;
+  double _perfectMessageTime = 0;
 
   Size _boardSize = Size.zero;
   StackBlock? movingBlock;
@@ -61,19 +63,24 @@ class GameController extends ChangeNotifier {
     bestScore = _storage.bestScore;
     particles.clear();
     _resetBoard();
+    lastWasPerfect = false;
+    _perfectMessageTime = 0;
     status = GameStatus.playing;
+    unawaited(_sound.startMusic());
     notifyListeners();
   }
 
   void pause() {
     if (status != GameStatus.playing) return;
     status = GameStatus.paused;
+    unawaited(_sound.pauseMusic());
     notifyListeners();
   }
 
   void resume() {
     if (status != GameStatus.paused) return;
     status = GameStatus.playing;
+    unawaited(_sound.resumeMusic());
     notifyListeners();
   }
 
@@ -101,6 +108,14 @@ class GameController extends ChangeNotifier {
     particles.removeWhere((p) => p.life <= 0);
 
     cameraShake = max(0, cameraShake - 28 * dt);
+
+    if (_perfectMessageTime > 0) {
+      _perfectMessageTime = max(0, _perfectMessageTime - dt);
+      if (_perfectMessageTime == 0) {
+        lastWasPerfect = false;
+      }
+    }
+
     notifyListeners();
   }
 
@@ -111,7 +126,10 @@ class GameController extends ChangeNotifier {
     final current = movingBlock!;
 
     final overlapLeft = max(previous.x, current.x);
-    final overlapRight = min(previous.x + previous.width, current.x + current.width);
+    final overlapRight = min(
+      previous.x + previous.width,
+      current.x + current.width,
+    );
     final overlap = overlapRight - overlapLeft;
 
     if (overlap <= 0) {
@@ -122,6 +140,7 @@ class GameController extends ChangeNotifier {
     final offset = (current.x - previous.x).abs();
     final perfect = offset <= AppConstants.perfectThreshold;
     lastWasPerfect = perfect;
+    _perfectMessageTime = perfect ? .65 : 0;
 
     double placedX = overlapLeft;
     double placedWidth = overlap;
@@ -132,20 +151,17 @@ class GameController extends ChangeNotifier {
       combo += 1;
       score += 2 + combo;
       cameraShake = 5;
-      await _haptics.medium(settings.hapticsEnabled);
-      await _sound.playPerfect(enabled: settings.soundEnabled);
+      await _haptics.mediumImpact();
+      await _sound.playPerfect();
     } else {
       combo = 0;
       score += 1;
       cameraShake = 2;
-      await _haptics.light(settings.hapticsEnabled);
-      await _sound.playTap(enabled: settings.soundEnabled);
+      await _haptics.lightImpact();
+      await _sound.playTap();
     }
 
-    final placed = current.copyWith(
-      x: placedX,
-      width: placedWidth,
-    );
+    final placed = current.copyWith(x: placedX, width: placedWidth);
 
     blocks.add(placed);
     _spawnParticles(placed, perfect);
@@ -163,8 +179,12 @@ class GameController extends ChangeNotifier {
     status = GameStatus.gameOver;
     movingBlock = null;
     combo = 0;
-    await _haptics.error(settings.hapticsEnabled);
-    await _sound.playGameOver(enabled: settings.soundEnabled);
+    lastWasPerfect = false;
+    _perfectMessageTime = 0;
+    cameraShake = 9;
+    await _sound.stopMusic();
+    await _haptics.heavyImpact();
+    await _sound.playGameOver();
 
     if (score > bestScore) {
       bestScore = score;
@@ -172,6 +192,12 @@ class GameController extends ChangeNotifier {
     }
 
     notifyListeners();
+  }
+
+  @override
+  void dispose() {
+    unawaited(_sound.stopMusic());
+    super.dispose();
   }
 
   void _resetBoard() {

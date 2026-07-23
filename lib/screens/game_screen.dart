@@ -1,8 +1,12 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 
- import '../game/game_controller.dart';
+import '../game/game_controller.dart';
 import '../game/game_painter.dart';
+import '../services/haptic_service.dart';
+import '../services/sound_service.dart';
 import '../services/storage_service.dart';
 import '../widgets/score_hud.dart';
 import 'game_over_screen.dart';
@@ -25,9 +29,8 @@ class _GameScreenState extends State<GameScreen>
   void initState() {
     super.initState();
 
-    _controller = GameController(
-      settings: StorageService.instance.settings,
-    )..addListener(_onGameChanged);
+    _controller = GameController(settings: StorageService.instance.settings)
+      ..addListener(_onGameChanged);
 
     _ticker = createTicker(_tick)..start();
   }
@@ -63,6 +66,11 @@ class _GameScreenState extends State<GameScreen>
     setState(() {});
   }
 
+  void _buttonFeedback() {
+    unawaited(HapticService.instance.selectionClick());
+    unawaited(SoundService.instance.playButton());
+  }
+
   @override
   void dispose() {
     _ticker.dispose();
@@ -85,6 +93,7 @@ class _GameScreenState extends State<GameScreen>
           actions: [
             TextButton(
               onPressed: () {
+                _buttonFeedback();
                 Navigator.of(context)
                   ..pop()
                   ..pop();
@@ -93,6 +102,7 @@ class _GameScreenState extends State<GameScreen>
             ),
             FilledButton(
               onPressed: () {
+                _buttonFeedback();
                 Navigator.of(context).pop();
                 _controller.resume();
               },
@@ -162,10 +172,7 @@ class _GameScreenState extends State<GameScreen>
                           letterSpacing: 3,
                           color: Colors.white,
                           shadows: [
-                            Shadow(
-                              color: Colors.cyanAccent,
-                              blurRadius: 20,
-                            ),
+                            Shadow(color: Colors.cyanAccent, blurRadius: 20),
                           ],
                         ),
                       ),
